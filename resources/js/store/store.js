@@ -19,12 +19,12 @@ export default {
     },
 
     actions: {
-        async getDataList(data, [page, limit]) {
+        async getDataList(data, [page, limit, keyword]) {
             await axios
                 .get(
                     base_url +
                     "post/post/list?page=" +
-                    page + "&limit=" + limit
+                    page + "&limit=" + limit + "&keyword=" + keyword
                 )
                 .then((response) => {
                     //console.log(response.data.post);

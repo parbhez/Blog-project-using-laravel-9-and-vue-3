@@ -108,7 +108,7 @@
                                     class="form-control"
                                     placeholder="Search By Title"
                                     v-model="keyword"
-                                    @keyup="getkeyupPost()"
+
                                 />
 
                             </div>
@@ -232,6 +232,7 @@
                         :from="totalFrom"
                         :to="totalTo"
                         :limit="limit"
+                        :keyword="keyword"
                     ></pagination-component>
                 </div>
             </div>
@@ -255,7 +256,7 @@ export default {
     },
 
     mounted() {
-        this.$store.dispatch("getDataList", [this.page, this.limit]);
+        this.$store.dispatch("getDataList", [this.page, this.limit,this.keyword]);
     },
 
     watch: {
@@ -263,9 +264,18 @@ export default {
             console.log(newLimit, oldLimit);
             if (newLimit) {
                 this.showToggle;
-                this.$store.dispatch("getDataList", [this.page, newLimit]);
+                this.$store.dispatch("getDataList", [this.page, newLimit,this.keyword]);
             }
         },
+        keyword(newValue,oldValue) {
+            //console.log(newValue, oldValue);
+            if(newValue){
+                this.showToggle;
+                this.$store.dispatch("getDataList", [this.page, this.limit, newValue]);
+            }
+
+        }
+
     },
 
     computed: {
