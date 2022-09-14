@@ -1,14 +1,7 @@
 <template>
-    <div class="row mt-4">
+    <div class="row mt-1">
         <div class="col-12">
             <div class="card">
-                <div class="card-header">
-                    <h4>All Posts</h4>
-                </div>
-
-                <vue-snotify></vue-snotify>
-                <preloader-component></preloader-component>
-
                 <div class="card-body">
                     <div class="float-left" style="margin-right: 10px">
                         <!-- <select class="form-control selectric"> -->
@@ -72,12 +65,19 @@
                             <button
                                 @click="clearFilter()"
                                 class="btn btn-primary btn-lg"
+
                             >
                                 Clear Filter
                             </button>
                         </div>
                     </div>
+
                 </div>
+
+                 <vue-snotify></vue-snotify>
+                 <preloader-component></preloader-component>
+
+
                 <div class="card-body">
                     <div class="float-left">
                         <label> Show &nbsp; </label>
@@ -110,11 +110,7 @@
                                     v-model="keyword"
                                     @keyup="getkeyupPost()"
                                 />
-                                <div class="input-group-append">
-                                    <button class="btn btn-primary btn-sm">
-                                        <i class="fas fa-search"></i>
-                                    </button>
-                                </div>
+
                             </div>
                         </form>
                     </div>
@@ -231,12 +227,19 @@
 
                     <pagination-component
                         v-if="posts"
-                        :pageData="posts" :totalRows="totalCountRows" :from="totalFrom" :to="totalTo" :limit="limit"
+                        :pageData="posts"
+                        :totalRows="totalCountRows"
+                        :from="totalFrom"
+                        :to="totalTo"
+                        :limit="limit"
                     ></pagination-component>
                 </div>
             </div>
         </div>
     </div>
+
+
+
 </template>
 
 <script>
@@ -252,15 +255,15 @@ export default {
     },
 
     mounted() {
-        this.$store.dispatch("getAllPost", [this.page, this.limit]);
+        this.$store.dispatch("getDataList", [this.page, this.limit]);
     },
 
     watch: {
         limit(newLimit, oldLimit) {
-            console.log(newLimit,oldLimit);
+            console.log(newLimit, oldLimit);
             if (newLimit) {
                 this.showToggle;
-                this.$store.dispatch("getAllPost", [this.page, newLimit]);
+                this.$store.dispatch("getDataList", [this.page, newLimit]);
             }
         },
     },
@@ -271,20 +274,17 @@ export default {
             // return this.$store.state.postDataArr;
         },
 
-        totalCountRows(){
-             return this.$store.state.totalCount;
+        totalCountRows() {
+            return this.$store.state.totalCount;
         },
-        totalFrom(){
-             return this.$store.state.from;
+        totalFrom() {
+            return this.$store.state.from;
         },
-        totalTo(){
+        totalTo() {
             return this.$store.state.to;
-        }
+        },
     },
 
-    methods: {
-        
-
-    },
+    methods: {},
 };
 </script>

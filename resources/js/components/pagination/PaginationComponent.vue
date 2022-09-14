@@ -14,7 +14,7 @@
                     <a
                         class="page-link"
                         :href="'?page=' + pageData.current_page"
-                        @click.prevent="pageClicked(pageData.current_page - 1)"
+                        @click.prevent="pageClicked(pageData.current_page - 1,limit)"
                         aria-label="Previous"
                         v-if="pageData.current_page != 1"
                     >
@@ -45,13 +45,13 @@
                                 ? 'page-link'
                                 : 'page-link',
                         ]"
-                        :href="'?page=' + pageNo + '&limit=' +limit" 
+                        :href="'?page=' + pageNo + '&limit=' +limit"
                         @click.prevent="pageClicked(pageNo,limit)"
                         >{{ pageNo }}</a
                     >
                 </li>
 
-              
+
 
                 <li
                     class="page-item"
@@ -64,7 +64,7 @@
                     <a
                         class="page-link"
                         :href="'?page=' + pageData.current_page"
-                        @click.prevent="pageClicked(pageData.current_page + 1)"
+                        @click.prevent="pageClicked(pageData.current_page + 1,limit)"
                         aria-label="Next"
                         v-if="pageData.current_page != pageData.last_page"
                     >
@@ -89,7 +89,7 @@ export default {
 
     data() {
         return {
-            
+
         };
     },
 
@@ -103,7 +103,7 @@ export default {
 
         pageClicked(page,limit) {
             //console.log(page);
-            this.$store.dispatch("getAllPost",[page,limit]);
+            this.$store.dispatch("getDataList",[page,limit]);
             // history.pushState(null, null, "?page=" + page);
         },
     },

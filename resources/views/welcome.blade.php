@@ -20,7 +20,6 @@
     <!-- Extra CSS Files -->
     @stack('style')
 
-
     <!-- General CSS Files -->
 
     <input type="hidden" id="base_url" value="{{ url('/') }}">
@@ -62,6 +61,8 @@
     </script>
 
 
+
+
     <!-- General JS Scripts -->
     <script src="{{ url('assets/modules/jquery.min.js') }}"></script>
     <script src="{{ url('assets/modules/popper.js') }}"></script>
@@ -82,11 +83,13 @@
     <script src="{{ url('assets/js/page/components-table.js') }}"></script>
     <script src="{{ url('assets/js/page/features-post-create.js') }}"></script>
     <script src="{{ url('assets/js/page/features-posts.js') }}"></script>
-   {{-- <script src="https://cdnjs.cloudflare.com/ajax/libs/axios/0.27.2/axios.min.js"></script> --}}
 
     <!-- Template JS File -->
     <script src="{{ url('assets/js/scripts.js') }}"></script>
     <script src="{{ url('assets/js/custom.js') }}"></script>
+
+
+
 
     <script>
         $(document).ready(function() {

@@ -1,10 +1,18 @@
 <template>
-    <div class="row">
-        <div class="col-12">
+    <!-- Modal -->
+  <div id="modal-form" class="modal fade bd-example-modal-lg" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-lg">
+
+    <form @submit.prevent="save()" role="form">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="exampleModalLabel">Write Your Post</h5>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="modal-body">
             <div class="card">
-                <div class="card-header">
-                    <h4>Write Your Post</h4>
-                </div>
                 <div
                     class="col-12"
                     v-if="validation_error"
@@ -26,7 +34,7 @@
                     </div>
                 </div>
 
-                <form @submit.prevent="save()" role="form">
+
                     <div class="card-body">
                         <div class="form-group row mb-4">
                             <label
@@ -49,7 +57,7 @@
                                 >Category</label
                             >
                             <div class="col-sm-12 col-md-7">
-                                <select
+                               <select
                                     class="form-control"
                                     v-model="post.category_id"
                                 >
@@ -64,6 +72,7 @@
                                         {{ category.category_name }}
                                     </option>
                                 </select>
+
                             </div>
                         </div>
                         <div class="form-group row mb-4">
@@ -146,28 +155,29 @@
                                 </select>
                             </div>
                         </div>
-                        <div class="form-group row mb-4">
-                            <label
-                                class="col-form-label text-md-right col-12 col-md-3 col-lg-3"
-                            ></label>
-                            <div class="col-sm-12 col-md-7">
-                                <button class="btn btn-primary">
-                                    {{ button_name }}
-                                </button>
-                            </div>
-                        </div>
                     </div>
-                </form>
+
             </div>
         </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+          <button class="btn btn-primary" type="submit">{{button_name}}</button>
+
+        </div>
+      </div>
+    </form>
+
     </div>
+  </div>
 </template>
 
 <script>
 import Mixin from "../mixin";
 
+
 export default {
     mixins: [Mixin],
+
 
     props: {
         categories: {
@@ -193,6 +203,14 @@ export default {
             button_name: "Create Post",
             validation_error: null,
             elementVisible: true,
+            value: null,
+            options: [
+                { name: 'Vue.js', language: 'JavaScript' },
+                { name: 'Rails', language: 'Ruby' },
+                { name: 'Sinatra', language: 'Ruby' },
+                { name: 'Laravel', language: 'PHP', $isDisabled: true },
+                { name: 'Phoenix', language: 'Elixir' }
+            ]
         };
     },
 
@@ -221,6 +239,7 @@ export default {
                     console.log(response.data);
 
                     if (response.data.status === "success") {
+                        $("#modal-form").modal('hide');
                         this.resetForm();
                         this.successMessage(response.data);
                         //EventBus.$emit("post-created");

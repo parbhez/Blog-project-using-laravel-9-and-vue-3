@@ -19,7 +19,7 @@ export default {
     },
 
     actions: {
-        async getAllPost(data, [page, limit]) {
+        async getDataList(data, [page, limit]) {
             await axios
                 .get(
                     base_url +
@@ -27,7 +27,7 @@ export default {
                     page + "&limit=" + limit
                 )
                 .then((response) => {
-                    console.log(response.data.post);
+                    //console.log(response.data.post);
                     //console.log(response.data.post.to);
                     this.isLoading = true;
                     data.commit('getAllPost', response.data.post);
