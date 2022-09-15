@@ -1,12 +1,8 @@
 export default {
-    data() {
-        return {
-
-        }
-    },
 
     state: {
         postDataArr: [],
+        testData: ['helo', 'kello'],
         totalCount: 0,
         from: 0,
         to: 0,
@@ -28,7 +24,7 @@ export default {
                 )
                 .then((response) => {
                     //console.log(response.data.post);
-                    //console.log(response.data.post.to);
+                    console.log(response.data.post.to);
                     this.isLoading = true;
                     data.commit('getAllPost', response.data.post);
                     data.commit('totalRowCount', response.data.post.total); //total row count from database

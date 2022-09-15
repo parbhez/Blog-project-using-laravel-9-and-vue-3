@@ -261,7 +261,7 @@ export default {
 
     watch: {
         limit(newLimit, oldLimit) {
-            console.log(newLimit, oldLimit);
+            //console.log(newLimit, oldLimit);
             if (newLimit) {
                 this.showToggle;
                 this.$store.dispatch("getDataList", [this.page, newLimit,this.keyword]);
@@ -275,23 +275,22 @@ export default {
             }
 
         }
-
     },
 
     computed: {
         posts() {
-            return this.$store.getters.getPostData;
-            // return this.$store.state.postDataArr;
+            //return this.$store.getters.post.getPostData;
+            return this.$store.state.post.postDataArr;
         },
 
         totalCountRows() {
-            return this.$store.state.totalCount;
+            return this.$store.state.post.totalCount;
         },
         totalFrom() {
-            return this.$store.state.from;
+            return this.$store.state.post.from;
         },
         totalTo() {
-            return this.$store.state.to;
+            return this.$store.state.post.to;
         },
     },
 

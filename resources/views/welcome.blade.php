@@ -11,7 +11,6 @@
 
     @vite(['resources/js/app.css.js', 'resources/js/app.js'])
 
-    @vite(['resources/js/package.js'])
 
 
     <!-- Extra vite/JS Scripts -->

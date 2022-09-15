@@ -13,16 +13,10 @@ import snotify from 'vue3-snotify';
 app.use(snotify);
 
 
-//Install Vuex
-
-import { createStore } from 'vuex';
-import storeData from './store/store';
-
-// Create a new store instance.
-const store = createStore(storeData);
-
-// Install the store instance as a plugin
+//Install Vuex the store instance as a plugin
+import store from "./store/index";
 app.use(store);
+
 
 
 //Dashboard
@@ -39,6 +33,9 @@ app.component('create-post-component', CreatePostComponent);
 //Category Component
 import CreateCategoryComponent from './components/category/CreateCategoryComponent.vue';
 app.component('create-category-component', CreateCategoryComponent);
+
+import ViewCategoryComponent from './components/category/ViewCategoryComponent.vue';
+app.component('view-category-component', ViewCategoryComponent);
 
 //Global register in Pagination
 import PaginationComponent from './components/pagination/PaginationComponent.vue';
