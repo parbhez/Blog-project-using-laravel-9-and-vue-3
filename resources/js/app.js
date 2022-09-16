@@ -30,6 +30,12 @@ import CreatePostComponent from './components/CreatePostComponent.vue';
 app.component('view-post-component', ViewPostComponent);
 app.component('create-post-component', CreatePostComponent);
 
+//post component
+
+import ViewPost from './components/post/ViewPost.vue';
+app.component('view-post', ViewPost);
+
+
 //Category Component
 import CreateCategoryComponent from './components/category/CreateCategoryComponent.vue';
 app.component('create-category-component', CreateCategoryComponent);
@@ -43,5 +49,8 @@ app.component('pagination-component', PaginationComponent);
 
 import PreloaderComponent from './components/pagination/Preloader.vue';
 app.component('preloader-component', PreloaderComponent);
+
+import SpinnerLoader from './components/SpinnerLoader.vue';
+app.component('spinner-loader', SpinnerLoader);
 
 app.mount('#app');

@@ -7,9 +7,7 @@
                         <label> Show &nbsp; </label>
                     </div>
                     <div class="float-left">
-                        <select
-                            class="form-control form-control-sm"
-                        >
+                        <select class="form-control form-control-sm">
                             <option value="10">10</option>
                             <option value="25">25</option>
                             <option value="50">50</option>
@@ -30,9 +28,7 @@
                                     type="text"
                                     class="form-control"
                                     placeholder="Search By Title"
-
                                 />
-
                             </div>
                         </form>
                     </div>
@@ -103,19 +99,14 @@
                                     </td>
                                     <td>fdssss</td>
                                     <td>
-                                        <a href="#">
-                                           asvafdb
-                                        </a
-                                        >,
+                                        <a href="#"> asvafdb </a>,
                                         <a href="#">Tutorial</a>
                                     </td>
                                     <td>
                                         <a href="#">
                                             <img
                                                 alt="image"
-                                                :src="
-                                                    '/images/post/demo.jpg'
-                                                "
+                                                :src="'/images/post/demo.jpg'"
                                                 class="rounded-circle"
                                                 width="35"
                                                 data-toggle="title"
@@ -134,43 +125,105 @@
                                     </td>
                                 </tr>
                             </tbody>
-
-                            
                         </table>
                     </div>
 
-                   
-                    
+                    <div>
+                        <h4>Todo</h4>
+
+                        <h4>Total Book : {{finaltotalBooks}}</h4>
+                        <input
+                            type="text"
+                            v-model="bookName"
+                            placeholder="Book name"
+                        />
+                        <button @click="addBook(bookName)">Add Book</button>
+
+                        <ul>
+                            <li v-for="(book, index) in getbookList" :key="index">
+                                {{ book }} <button @click="deleteBook(index)">Delete</button>
+
+                            </li>
+                        </ul>
+
+                    </div>
                 </div>
             </div>
         </div>
     </div>
-
-
-
 </template>
 
 <script>
+import { mapState, mapActions, mapGetters } from 'vuex';
+export default {
 
-    export default{
-        data(){
-            return {
+    data() {
+        return {
+            bookName: "",
+        };
+    },
 
-            }
-        },
+    mounted() {},
 
-        mounted(){
-           
-        },
+    computed: {
 
-        computed:{
-           
-        },
 
-        methods:{
+        ...mapState({
+            getbookList: state => state.category.bookList,
+        }),
 
-        }
+        // bookList(){
+        //     return this.$store.state.category.bookList
+        // },
+        // cart(){
+        //     return this.$store.state.category.cart
+        // }
 
-    }
 
+        //Getter using namespace
+        ...mapGetters('category',{
+            finaltotalBooks: "totalBooks",
+        })
+
+        //using namespace
+        // finaltotalBooks(){
+        //     return this.$store.getters['category/totalBooks'];
+        // },
+
+        // //using without namespace
+        // finaltotalBooks(){
+        //     return this.$store.getters.totalBooks;
+        // }
+
+
+    },
+
+    methods: {
+
+        ...mapActions('category',{
+            deleteBook: "deleteBook",
+            addBook: "addBook",
+        })
+
+       //using without namespace
+        // addBook(){
+        //     this.$store.dispatch('addBook',this.bookName);
+        // },
+
+        // deleteBook(index){
+        //     this.$store.dispatch('deleteBook',index);
+        // },
+
+        //using namespace
+        //  addBook(){
+        //     this.$store.dispatch('category/addBook',this.bookName);
+        // },
+
+        // deleteBook(index){
+        //     this.$store.dispatch('category/deleteBook',index);
+        // },
+
+
+    },
+};
 </script>

@@ -6,8 +6,8 @@ import postModule from './modules/post'
 
 const store = createStore({
     modules: {
-        post: postModule,
-        category: categoryModule
+        post: postModule, //postModule r namespace hoycce = post
+        category: categoryModule //categoryModule r namespace hoycce = category
     },
 
 })

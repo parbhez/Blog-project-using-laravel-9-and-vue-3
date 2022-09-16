@@ -1,7 +1,11 @@
 @extends('welcome')
 
 @section('content')
+
+
     <div class="main-content">
+
+
         <section class="section">
             <div class="section-header">
                 <h1>All Post</h1>
@@ -29,8 +33,9 @@
 
                             <div class="card-body">
 
+                                {{-- <view-post-component></view-post-component> --}}
+                                <view-post></view-post>
 
-                                <view-post-component></view-post-component>
                             </div>
                         </div>
                     </div>
@@ -45,3 +50,4 @@
     <create-post-component :categories='@json($categories)'></create-post-component>
 
 @endsection
+

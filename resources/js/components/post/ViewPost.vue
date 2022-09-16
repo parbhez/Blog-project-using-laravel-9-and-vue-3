@@ -1,91 +1,34 @@
 <template>
-    <div class="row mt-1">
+    <div class="row mt-1" style="display: none" id="postTable">
+        <div
+            style="
+                display: flex;
+                justify-content: center;
+                align-items: center;
+                background-color: black;
+                position: fixed;
+                top: 0px;
+                left: 0px;
+                z-index: 1040;
+                width: 100%;
+                height: 100%;
+                opacity: 0.5;
+            "
+            v-if="isLoading"
+        >
+            <spinner-loader></spinner-loader>
+        </div>
+
         <div class="col-12">
             <div class="card">
-                <div class="card-body">
-                    <div class="float-left" style="margin-right: 10px">
-                        <!-- <select class="form-control selectric"> -->
-                        <select class="form-control">
-                            <option selected disabled value="">
-                                Action For Selected
-                            </option>
-                            <option>Move to Draft</option>
-                            <option>Move to Pending</option>
-                            <option>Delete Pemanently</option>
-                        </select>
-                        &nbsp;
-                    </div>
-
-                    <div class="float-left" style="margin-right: 10px">
-                        <!-- <select class="form-control selectric"> -->
-                        <select class="form-control">
-                            <option value="" disabled selected>
-                                Select Category
-                            </option>
-                            <option>News</option>
-                            <option>International</option>
-                            <option>National</option>
-                        </select>
-                    </div>
-                    &nbsp;
-
-                    <div class="float-left" style="margin-right: 10px">
-                        <!-- <select class="form-control selectric"> -->
-                        <select class="form-control">
-                            <option value="" disabled selected>
-                                Select Sub Category
-                            </option>
-                            <option>Sub News</option>
-                            <option>Sub International</option>
-                            <option>Sub National</option>
-                        </select>
-                    </div>
-                    &nbsp;
-
-                    <div class="float-left">
-                        <div class="input-group">
-                            <input
-                                type="text"
-                                class="form-control"
-                                placeholder="Search By Title"
-                                v-model="keyword"
-                                @keyup="getkeyupPost()"
-                            />
-                            <div class="input-group-append">
-                                <button class="btn btn-primary btn-sm">
-                                    <i class="fas fa-search"></i>
-                                </button>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="float-left">
-                        <div class="input-group-append">
-                            &nbsp;&nbsp;
-                            <button
-                                @click="clearFilter()"
-                                class="btn btn-primary btn-lg"
-
-                            >
-                                Clear Filter
-                            </button>
-                        </div>
-                    </div>
-
-                </div>
-
-                 <vue-snotify></vue-snotify>
-                 <preloader-component></preloader-component>
-
-
                 <div class="card-body">
                     <div class="float-left">
                         <label> Show &nbsp; </label>
                     </div>
                     <div class="float-left">
                         <select
-                            v-model="limit"
                             class="form-control form-control-sm"
+                            v-model="limit"
                         >
                             <option value="10">10</option>
                             <option value="25">25</option>
@@ -108,14 +51,14 @@
                                     class="form-control"
                                     placeholder="Search By Title"
                                     v-model="keyword"
-
                                 />
-
                             </div>
                         </form>
                     </div>
 
                     <div class="clearfix mb-3"></div>
+
+                    Total = {{Object.keys(totalPost).length}}
 
                     <div class="table-responsive">
                         <table class="table table-striped">
@@ -147,10 +90,10 @@
                                 <th>Status</th>
                             </tr>
 
-                            <tbody v-if="posts">
+                            <tbody v-if="Object.keys(totalPost).length > 0">
                                 <tr
-                                    v-for="(value, index) in posts.data"
-                                    :key="index"
+                                    v-for="(post, key) in getAllPost.data"
+                                    :key="key"
                                 >
                                     <td>
                                         <div
@@ -169,9 +112,9 @@
                                             >
                                         </div>
                                     </td>
-                                    <td>{{ value.id }}</td>
+                                    <td>{{ key + 1 }}</td>
                                     <td>
-                                        {{ value.title }}
+                                        {{ post.title }}
                                         <div class="table-links">
                                             <a href="#">View</a>
                                             <div class="bullet"></div>
@@ -182,10 +125,10 @@
                                             >
                                         </div>
                                     </td>
-                                    <td>{{ value.tag }}</td>
+                                    <td>{{ post.tag }}</td>
                                     <td>
                                         <a href="#">{{
-                                            value.category.category_name
+                                            post.category.category_name
                                         }}</a
                                         >,
                                         <a href="#">Tutorial</a>
@@ -194,10 +137,7 @@
                                         <a href="#">
                                             <img
                                                 alt="image"
-                                                :src="
-                                                    '/images/post/' +
-                                                    value.thumbnail
-                                                "
+                                                :src="'/images/post/demo.jpg'"
                                                 class="rounded-circle"
                                                 width="35"
                                                 data-toggle="title"
@@ -216,107 +156,74 @@
                                     </td>
                                 </tr>
                             </tbody>
-
-                            <tbody v-if="!posts">
+                            <tbody v-else>
                                 <tr>
-                                    <td>Data not found</td>
+                                    <td colspan="8" class="text-center">
+                                        Data not found
+                                    </td>
                                 </tr>
                             </tbody>
                         </table>
                     </div>
 
-                    <pagination-component
-                        v-if="posts"
-                        :pageData="posts"
-                        :totalRows="totalCountRows"
-                        :from="totalFrom"
-                        :to="totalTo"
-                        :limit="limit"
-                        :keyword="keyword"
-                    ></pagination-component>
+                    <!-- <pagination-component></pagination-component> -->
                 </div>
             </div>
         </div>
     </div>
-
-
-
-   <div>
-    <h2>Todo</h2>
-
-    <input type="text" v-model="postName"> <button  @click="addPost">Add Post</button>
-
-    <ul>
-        <li v-for="(postList,index) in showPostList" :key="index">{{postList}}</li>
-    </ul>
-   </div>
-
-
-
 </template>
 
 <script>
+$(document).ready(function () {
+    $("#postTable").show();
+});
 export default {
     data() {
         return {
-            isLoading: false,
-            keyword: "",
-            url: base_url,
             limit: 10,
-            page: 1,
-            postName: '',
+            keyword: "",
         };
     },
 
-    mounted() {
-        this.$store.dispatch("getDataList", [this.page, this.limit,this.keyword]);
+    watch: {
+        limit(newLimit, oldValue) {
+            //console.log(newValue,oldValue)
+            return this.$store.dispatch("post/getAllPost", [
+                newLimit,
+                this.keyword,
+            ]);
+        },
+        keyword(newKeyword, oldKeyword) {
+            return this.$store.dispatch("post/getAllPost", [
+                this.limit,
+                newKeyword,
+            ]);
+        },
     },
 
-    watch: {
-        limit(newLimit, oldLimit) {
-            //console.log(newLimit, oldLimit);
-            if (newLimit) {
-                this.showToggle;
-                this.$store.dispatch("getDataList", [this.page, newLimit,this.keyword]);
-            }
-        },
-        keyword(newValue,oldValue) {
-            //console.log(newValue, oldValue);
-            if(newValue){
-                this.showToggle;
-                this.$store.dispatch("getDataList", [this.page, this.limit, newValue]);
-            }
-
-        }
+    mounted() {
+        return this.$store.dispatch("post/getAllPost", [
+            this.limit,
+            this.keyword,
+        ]);
     },
 
     computed: {
-        posts() {
-            //return this.$store.getters.post.getPostData;
-            return this.$store.state.post.postDataArr;
+        getAllPost() {
+            return this.$store.state.post.posts;
         },
 
-        totalCountRows() {
-            return this.$store.state.post.totalCount;
-        },
-        totalFrom() {
-            return this.$store.state.post.from;
-        },
-        totalTo() {
-            return this.$store.state.post.to;
+        totalPost() {
+            return this.$store.getters["post/totalPost"];
         },
 
-        showPostList(){
-            return this.$store.state.post.postList;
+        isLoading() {
+            return this.$store.getters["post/isLoading"];
         },
 
-        addPost(){
-            this.$store.dispatch('addPost',this.postName);
-        }
-    },
-
-    methods: {
 
     },
+
+    methods: {},
 };
 </script>

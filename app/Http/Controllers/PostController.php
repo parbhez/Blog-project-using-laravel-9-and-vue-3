@@ -48,7 +48,7 @@ class PostController extends Controller
 
     public function getPostList(Request $request)
     {
-        
+
         $post = Post::with('category'); //belongs to
 
         if ($request->limit != '') {
@@ -60,15 +60,14 @@ class PostController extends Controller
 
     public function postList(Request $request)
     {
-        
+
         $post = Post::with('category'); //belongs to
 
-        if ($request->limit != '' && $request->limit != 'all') {
+        if ($request->limit != '') {
             $post = $post->paginate($request->limit);
-        }else{
-            $post = $post->get();
         }
-        
+
+
         return response()->json([
             "post" => $post
         ], 200);

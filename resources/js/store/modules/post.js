@@ -1,55 +1,53 @@
 export default {
 
+    namespaced: true,
+
     state: {
-        postDataArr: [],
-        testData: ['helo', 'kello'],
-        totalCount: 0,
-        from: 0,
-        to: 0,
+        posts: [],
+        isLoading: false
     },
 
     getters: {
-        getPostData(state) {
-            return state.postDataArr;
+        totalPost(state) {
+            return state.posts;
+        },
+
+        isLoading(state) {
+            return state.isLoading;
+        }
+    },
+
+    mutations: {
+        getAllPost(state, data) {
+            console.log(data);
+            state.posts = data;
+            state.isLoading = false;
         }
     },
 
     actions: {
-        async getDataList(data, [page, limit, keyword]) {
+        async getAllPost({ commit, state }, [limit, keyword]) {
+
+            state.isLoading = true;
+
             await axios
-                .get(
-                    base_url +
-                    "post/post/list?page=" +
-                    page + "&limit=" + limit + "&keyword=" + keyword
-                )
+                .get(base_url + 'post/post/list?limit=' + limit + "&keyword=" + keyword)
                 .then((response) => {
-                    //console.log(response.data.post);
-                    console.log(response.data.post.to);
-                    this.isLoading = true;
-                    data.commit('getAllPost', response.data.post);
-                    data.commit('totalRowCount', response.data.post.total); //total row count from database
-                    data.commit('totalRowfrom', response.data.post.from);
-                    data.commit('totalRowTo', response.data.post.to);
+                    commit('getAllPost', response.data.post);
                 })
                 .catch((error) => {
-                    console.log(error);
-                });
-            history.pushState(null, null, "?page=" + page + "&limit=" + limit);
+                    console.log(error)
+                    this.isLoading = false;
+                })
+            history.pushState(null, null, "?limit=" + limit + "&keyword=" + keyword);
         },
-    },
 
-    mutations: {
-        getAllPost(state, data2) {
-            state.postDataArr = data2;
-        },
-        totalRowCount(state, rowcount) {
-            state.totalCount = rowcount;
-        },
-        totalRowfrom(state, from) {
-            state.from = from;
-        },
-        totalRowTo(state, to) {
-            state.to = to;
-        }
-    },
-};
+
+    }
+
+
+
+
+
+
+}
