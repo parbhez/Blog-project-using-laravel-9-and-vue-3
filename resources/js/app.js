@@ -18,7 +18,6 @@ import store from "./store/index";
 app.use(store);
 
 
-
 //Dashboard
 import DashboardComponent from './components/DashboardComponent.vue';
 app.component('dashboard-component', DashboardComponent);
@@ -34,6 +33,9 @@ app.component('create-post-component', CreatePostComponent);
 
 import ViewPost from './components/post/ViewPost.vue';
 app.component('view-post', ViewPost);
+
+import CreatePost from './components/post/CreatePost.vue';
+app.component('create-post', CreatePost);
 
 
 //Category Component
@@ -52,5 +54,8 @@ app.component('preloader-component', PreloaderComponent);
 
 import SpinnerLoader from './components/SpinnerLoader.vue';
 app.component('spinner-loader', SpinnerLoader);
+
+import Loader from './components/Loader.vue';
+app.component('loader-component', Loader);
 
 app.mount('#app');

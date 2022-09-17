@@ -47,7 +47,7 @@
 
     </div>
        <!-- Modal ke always  main content div r bahire rakhte hoy-->
-    <create-post-component :categories='@json($categories)'></create-post-component>
+    <create-post :categories='@json($categories)'></create-post>
 
 @endsection
 

@@ -172,7 +172,7 @@
 </template>
 
 <script>
-import Mixin from "../mixin";
+import Mixin from "../helper/mixin";
 
 
 export default {

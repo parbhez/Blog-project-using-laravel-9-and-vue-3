@@ -1,13 +1,6 @@
 <template>
     <div class="float-left">
-        <div
-            class="dataTables_info"
-            id="table-2_info"
-            role="status"
-            aria-live="polite"
-        >
-            Showing {{startFrom}} to {{endTo}} of {{totalCountData}} entries
-        </div>
+        <div class="dataTables_info" id="table-2_info" role="status" aria-live="polite">Showing {{ from }} to {{ to }} of  {{ totalRows }} entries</div>
     </div>
 
     <div class="float-right">
@@ -21,13 +14,19 @@
                     <a
                         class="page-link"
                         :href="'?page=' + pageData.current_page"
-                        @click.prevent="pageClicked(pageData.current_page - 1)"
+                        @click.prevent="pageClicked(pageData.current_page - 1,limit,keyword)"
                         aria-label="Previous"
                         v-if="pageData.current_page != 1"
                     >
+                        <!-- <span aria-hidden="true">«</span>
+                        <span class="sr-only">Previous</span> -->
                         Previous
                     </a>
-                    <a v-else> Previous </a>
+                    <a v-else>
+                        <!-- <span aria-hidden="true"> «</span>
+                        <span class="sr-only">Previous</span> -->
+                        Previous
+                    </a>
                 </li>
                 &nbsp;
 
@@ -46,11 +45,13 @@
                                 ? 'page-link'
                                 : 'page-link',
                         ]"
-                        :href="'?page=' + pageNo"
-                        @click.prevent="pageClicked(pageNo)"
+                        :href="'?page=' + pageNo + '&limit=' +limit"
+                        @click.prevent="pageClicked(pageNo,limit,keyword)"
                         >{{ pageNo }}</a
                     >
                 </li>
+
+
 
                 <li
                     class="page-item"
@@ -63,26 +64,35 @@
                     <a
                         class="page-link"
                         :href="'?page=' + pageData.current_page"
-                        @click.prevent="pageClicked(pageData.current_page + 1)"
+                        @click.prevent="pageClicked(pageData.current_page + 1,limit,keyword)"
                         aria-label="Next"
                         v-if="pageData.current_page != pageData.last_page"
                     >
+                        <!-- <span aria-hidden="true">»</span>
+                        <span class="sr-only">Next</span> -->
                         Next
                     </a>
-                    <a v-else> Next </a>
+                    <a v-else>
+                        <!-- <span aria-hidden="true">»</span>
+                        <span class="sr-only">Next</span> -->
+                        Next
+                    </a>
                 </li>
             </ul>
         </nav>
     </div>
 </template>
 
-<script>
+<script type="text/javascript">
 export default {
-    props: ["pageData", "limit", "keyword"],
+    props: ["pageData","totalRows","from","to","limit","keyword"],
 
     data() {
-        return {};
+        return {
+
+        };
     },
+
 
     methods: {
         range(start, count) {
@@ -91,13 +101,9 @@ export default {
             });
         },
 
-        pageClicked(page) {
-            //console.log(keyword);
-            return this.$store.dispatch("post/geDatatList", [
-                page,
-                this.limit,
-                this.keyword,
-            ]);
+        pageClicked(page,limit,keyword) {
+            //console.log(page);
+            this.$store.dispatch("getDataList",[page,limit]);
             // history.pushState(null, null, "?page=" + page);
         },
     },
@@ -122,19 +128,6 @@ export default {
                 return 11;
             }
         },
-
-        totalCountData(){
-            return this.$store.state.post.posts.total;
-        },
-        startFrom(){
-            return this.$store.state.post.posts.from;
-        },
-        endTo(){
-            return this.$store.state.post.posts.to;
-        }
-
     },
 };
 </script>
-
-<style></style>

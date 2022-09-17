@@ -242,7 +242,7 @@
 
 <script>
 
-import PaginationComponent from "./pagination/PaginationComponent.vue";
+import PaginationComponent from "./pagination/PaginationComponent-back.vue";
 
 export default {
     components: {

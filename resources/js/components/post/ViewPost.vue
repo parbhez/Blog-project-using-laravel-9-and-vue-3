@@ -1,23 +1,7 @@
 <template>
-    <div class="row mt-1" style="display: none" id="postTable">
-        <div
-            style="
-                display: flex;
-                justify-content: center;
-                align-items: center;
-                background-color: black;
-                position: fixed;
-                top: 0px;
-                left: 0px;
-                z-index: 1040;
-                width: 100%;
-                height: 100%;
-                opacity: 0.5;
-            "
-            v-if="isLoading"
-        >
-            <spinner-loader></spinner-loader>
-        </div>
+    <div class="row mt-1">
+
+        <loader-component :loading="isLoading"></loader-component>
 
         <div class="col-12">
             <div class="card">
@@ -57,8 +41,6 @@
                     </div>
 
                     <div class="clearfix mb-3"></div>
-
-                    Total = {{Object.keys(totalPost).length}}
 
                     <div class="table-responsive">
                         <table class="table table-striped">
@@ -166,7 +148,7 @@
                         </table>
                     </div>
 
-                    <!-- <pagination-component></pagination-component> -->
+                     <pagination-component :pageData="getAllPost" :limit="limit" :keyword="keyword"></pagination-component>
                 </div>
             </div>
         </div>
@@ -174,27 +156,29 @@
 </template>
 
 <script>
-$(document).ready(function () {
-    $("#postTable").show();
-});
+
 export default {
+
     data() {
         return {
             limit: 10,
             keyword: "",
+            page: 1,
         };
     },
 
     watch: {
         limit(newLimit, oldValue) {
             //console.log(newValue,oldValue)
-            return this.$store.dispatch("post/getAllPost", [
+            return this.$store.dispatch("post/geDatatList", [
+                this.page,
                 newLimit,
                 this.keyword,
             ]);
         },
         keyword(newKeyword, oldKeyword) {
-            return this.$store.dispatch("post/getAllPost", [
+            return this.$store.dispatch("post/geDatatList", [
+                this.page,
                 this.limit,
                 newKeyword,
             ]);
@@ -202,13 +186,15 @@ export default {
     },
 
     mounted() {
-        return this.$store.dispatch("post/getAllPost", [
+        return this.$store.dispatch("post/geDatatList", [
+            this.page,
             this.limit,
             this.keyword,
         ]);
     },
 
     computed: {
+
         getAllPost() {
             return this.$store.state.post.posts;
         },
@@ -220,8 +206,6 @@ export default {
         isLoading() {
             return this.$store.getters["post/isLoading"];
         },
-
-
     },
 
     methods: {},
