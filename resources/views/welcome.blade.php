@@ -11,8 +11,6 @@
 
     @vite(['resources/js/app.css.js', 'resources/js/app.js'])
 
-
-
     <!-- Extra vite/JS Scripts -->
     @stack('script')
 

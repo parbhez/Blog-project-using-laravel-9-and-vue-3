@@ -73,7 +73,7 @@
                                 <th>Action</th>
                             </tr>
 
-                            <tbody v-if="Object.keys(totalPost).length > 0">
+                            <tbody v-if="Object.keys(countTotalPost).length > 0">
                                 <tr
                                     v-for="(post, key) in getAllPost.data"
                                     :key="key"
@@ -98,7 +98,7 @@
                                     <td>{{ key + 1 }}</td>
                                     <td>
                                         {{ post.title }}
-                                       
+
                                     </td>
                                     <td>{{ post.tag }}</td>
                                     <td>
@@ -192,10 +192,12 @@ export default {
     computed: {
 
         getAllPost() {
+
             return this.$store.state.post.posts;
+
         },
 
-        totalPost() {
+        countTotalPost() {
             return this.$store.getters["post/totalPost"];
         },
 
