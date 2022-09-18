@@ -91,34 +91,51 @@ class PostController extends Controller
 
         try {
 
+           
+
             $post = new Post;
             $post->title = $request->title;
             $post->category_id = $request->category_id;
-            $post->content = $request->content;
+            $post->body = $request->content;
             $post->tag = $request->tag;
             $post->status = $request->status;
 
+           
+
+
             $imageData = $request->get('image');
+
+           
 
             if ($imageData) {
 
+               
+
                 $fileName = uniqid() . '.' . explode('/', explode(':', substr($imageData, 0, strpos($imageData, ';')))[1])[1];
+               
                 $path = public_path('images/post') . "/" . $fileName;
-                Image::make($request->get('image'))->save($path);
+                
+                $saveImg = Image::make($request->get('image'))->save($path);
 
                 $post->thumbnail = $fileName;
+
             }
 
-
+           
             $post->save();
 
             // //  clear home page category cache
             // Cache::forget('all-category');
 
             return response()->json(['status' => 'success', 'message' => 'Post Created Successfully !']);
-        } catch (\Exception $e) {
-            // return $e;
-            return response()->json(['status' => 'error', 'message' => 'Opps Something Went Wrong!']);
+        } catch (\Illuminate\Database\QueryException $e) {
+            //return $e;
+            return response()->json([
+                'status' => 'error', 
+                'message' => 'Opps Something Went Wrong!',
+                'result' => $e->getMessage(),
+                'code' => 500
+            ]);
         }
     }
 
@@ -140,8 +157,30 @@ class PostController extends Controller
     }
 
 
-    public function destroy(Post $post)
+    public function deletePost($id)
     {
-        //
+        return $id;
+        
+        try {
+           
+                $post = Post::find($id);
+
+
+                if (file_exists('images/post/' . $post->thumbnail) && !empty($post->thumbnail)) {
+
+                    unlink('images/post/' . $post->thumbnail);
+
+
+                }
+
+                $post->delete();
+
+                return response()->json(['status' => 'success', 'message' => 'Delete Successfull !']);
+            
+
+        } catch (\Exception $e) {
+            // return $e;
+            return response()->json(['status' => 'error', 'message' => 'Something Went Wrong !']);
+        }
     }
 }

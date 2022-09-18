@@ -12,16 +12,16 @@ export default {
             return en;
         },
 
+
         successMessage(data) {
-            this.$swal({
+            let that = this;
+            that.$swal({
                 icon: data.status,
                 title: data.status,
                 text: data.message,
                 timer: 3000,
                 timerProgressBar: true
             });
-
-            location.reload();
         },
 
         validationError(message = 'Please Fillup Form Correctly !!') {

@@ -1,17 +1,10 @@
-import Mixin from "../../helper/mixin"
-
 export default {
 
-    mixins: [Mixin],
     namespaced: true,
 
     state: {
         posts: [],
         isLoading: false,
-
-        button_name: "Create Post",
-        validation_error: null,
-        elementVisible: true,
     },
 
     getters: {
@@ -53,31 +46,14 @@ export default {
             history.pushState(null, null, "?page=" + page + "&limit=" + limit + "&keyword=" + keyword);
         },
 
-        saveData({ commit, state }, inputPostData) {
-
-            state.button_name = "Saving Post...";
-
-            axios
-                .post(base_url + "post/post-create", inputPostData)
+        async deletePost({ commit }, id) {
+            await axios.get(base_url + 'post/delete-post/' + id)
                 .then((response) => {
-
-                    if (response.data.status == "success") {
-                        console.log(response.data.status);
-                        $("#modal-form").modal("hide");
-                        //this.resetForm();
-                        //this.successMessage(response.data);
-                        this.button_name = "Create Post";
-                    } else {
-                        //this.successMessage(response.data);
-                        this.button_name = "Create Post";
-                    }
+                    console.log(response.data)
                 })
-                .catch((err) => {
-                    console.log(err);
-                    //state.isloading = false;
-                    state.button_name = "Create Post";
-
-                });
+                .catch((error) => {
+                    console.log(error)
+                })
         }
 
     }

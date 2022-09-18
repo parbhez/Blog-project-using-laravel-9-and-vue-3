@@ -70,6 +70,7 @@
                                 <th>Author</th>
                                 <th>Created At</th>
                                 <th>Status</th>
+                                <th>Action</th>
                             </tr>
 
                             <tbody v-if="Object.keys(totalPost).length > 0">
@@ -97,15 +98,7 @@
                                     <td>{{ key + 1 }}</td>
                                     <td>
                                         {{ post.title }}
-                                        <div class="table-links">
-                                            <a href="#">View</a>
-                                            <div class="bullet"></div>
-                                            <a href="#">Edit</a>
-                                            <div class="bullet"></div>
-                                            <a href="#" class="text-danger"
-                                                >Trash</a
-                                            >
-                                        </div>
+                                       
                                     </td>
                                     <td>{{ post.tag }}</td>
                                     <td>
@@ -119,7 +112,7 @@
                                         <a href="#">
                                             <img
                                                 alt="image"
-                                                :src="'/images/post/demo.jpg'"
+                                                :src="'/images/post/' + post.thumbnail"
                                                 class="rounded-circle"
                                                 width="35"
                                                 data-toggle="title"
@@ -132,9 +125,12 @@
                                     </td>
                                     <td>10.20.10</td>
                                     <td>
-                                        <div class="badge badge-primary">
-                                            Published
+                                        <div class="badge" :class="statusColor(post.status)">
+                                            {{ statusName(post.status) }}
                                         </div>
+                                    </td>
+                                    <td>
+                                       <a class="btn btn-secondary btn-sm" @click.prevent="deletePost(post.id)">Delete</a>
                                     </td>
                                 </tr>
                             </tbody>
@@ -170,14 +166,14 @@ export default {
     watch: {
         limit(newLimit, oldValue) {
             //console.log(newValue,oldValue)
-            return this.$store.dispatch("post/geDatatList", [
+            this.$store.dispatch("post/geDatatList", [
                 this.page,
                 newLimit,
                 this.keyword,
             ]);
         },
         keyword(newKeyword, oldKeyword) {
-            return this.$store.dispatch("post/geDatatList", [
+            this.$store.dispatch("post/geDatatList", [
                 this.page,
                 this.limit,
                 newKeyword,
@@ -186,7 +182,7 @@ export default {
     },
 
     mounted() {
-        return this.$store.dispatch("post/geDatatList", [
+        this.$store.dispatch("post/geDatatList", [
             this.page,
             this.limit,
             this.keyword,
@@ -208,6 +204,28 @@ export default {
         },
     },
 
-    methods: {},
+    methods: {
+        statusName(status){
+            let data = {
+                0: "Pending",
+                1: "Published",
+                2: "Draft"
+            }
+            return data[status];
+        },
+
+        statusColor(status){
+            let data = {
+                0: "badge-warning",
+                1: "badge-primary",
+                2: "badge-danger"
+            }
+            return data[status];
+        },
+
+        deletePost(id){
+            this.$store.dispatch('post/deletePost', id);
+        }
+    },
 };
 </script>

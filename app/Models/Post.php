@@ -13,6 +13,11 @@ class Post extends Model
 
     protected $table = 'posts';
 
+    protected $fillable = [
+        'category_id',
+        'title',
+        'status',
+    ];
     //Relationship with category
     public function category()
     {

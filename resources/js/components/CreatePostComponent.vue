@@ -203,14 +203,6 @@ export default {
             button_name: "Create Post",
             validation_error: null,
             elementVisible: true,
-            value: null,
-            options: [
-                { name: 'Vue.js', language: 'JavaScript' },
-                { name: 'Rails', language: 'Ruby' },
-                { name: 'Sinatra', language: 'Ruby' },
-                { name: 'Laravel', language: 'PHP', $isDisabled: true },
-                { name: 'Phoenix', language: 'Elixir' }
-            ]
         };
     },
 
