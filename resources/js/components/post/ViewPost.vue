@@ -1,6 +1,5 @@
 <template>
     <div class="row mt-1">
-
         <loader-component :loading="isLoading"></loader-component>
 
         <div class="col-12">
@@ -73,7 +72,9 @@
                                 <th>Action</th>
                             </tr>
 
-                            <tbody v-if="Object.keys(countTotalPost).length > 0">
+                            <tbody
+                                v-if="Object.keys(countTotalPost).length > 0"
+                            >
                                 <tr
                                     v-for="(post, key) in getAllPost.data"
                                     :key="key"
@@ -95,10 +96,9 @@
                                             >
                                         </div>
                                     </td>
-                                    <td>{{ key + 1 }}</td>
+                                    <td>{{ post.id }}</td>
                                     <td>
                                         {{ post.title }}
-
                                     </td>
                                     <td>{{ post.tag }}</td>
                                     <td>
@@ -112,7 +112,10 @@
                                         <a href="#">
                                             <img
                                                 alt="image"
-                                                :src="'/images/post/' + post.thumbnail"
+                                                :src="
+                                                    '/images/post/' +
+                                                    post.thumbnail
+                                                "
                                                 class="rounded-circle"
                                                 width="35"
                                                 data-toggle="title"
@@ -123,14 +126,21 @@
                                             </div>
                                         </a>
                                     </td>
-                                    <td>10.20.10</td>
+                                    <td>{{ dateTimeFormat(post.created_at)}}</td>
                                     <td>
-                                        <div class="badge" :class="statusColor(post.status)">
+                                        <div
+                                            class="badge"
+                                            :class="statusColor(post.status)"
+                                        >
                                             {{ statusName(post.status) }}
                                         </div>
                                     </td>
                                     <td>
-                                       <a class="btn btn-secondary btn-sm" @click.prevent="deletePost(post.id)">Delete</a>
+                                        <a
+                                            class="btn btn-secondary btn-sm"
+                                            @click.prevent="deletePost(post.id)"
+                                            >Delete</a
+                                        >
                                     </td>
                                 </tr>
                             </tbody>
@@ -144,7 +154,11 @@
                         </table>
                     </div>
 
-                     <pagination-component :pageData="getAllPost" :limit="limit" :keyword="keyword"></pagination-component>
+                    <pagination-component
+                        :pageData="getAllPost"
+                        :limit="limit"
+                        :keyword="keyword"
+                    ></pagination-component>
                 </div>
             </div>
         </div>
@@ -152,9 +166,9 @@
 </template>
 
 <script>
-
+import Mixin from "../../helper/mixin";
 export default {
-
+    mixins: [Mixin],
     data() {
         return {
             limit: 10,
@@ -190,11 +204,8 @@ export default {
     },
 
     computed: {
-
         getAllPost() {
-
             return this.$store.state.post.posts;
-
         },
 
         countTotalPost() {
@@ -204,30 +215,40 @@ export default {
         isLoading() {
             return this.$store.getters["post/isLoading"];
         },
+
+
     },
 
     methods: {
-        statusName(status){
-            let data = {
-                0: "Pending",
-                1: "Published",
-                2: "Draft"
-            }
-            return data[status];
-        },
 
-        statusColor(status){
-            let data = {
-                0: "badge-warning",
-                1: "badge-primary",
-                2: "badge-danger"
-            }
-            return data[status];
-        },
+        async deletePost(id) {
+            this.$swal({
+                title: "Are you sure?",
+                text: "You won't be able to revert this!",
+                icon: "warning",
+                showCancelButton: true,
+                confirmButtonColor: "#3085d6",
+                cancelButtonColor: "#d33",
+                confirmButtonText: "Yes, delete it!",
+            }).then((result) => {
+                if (result.isConfirmed) {
+                axios.get(base_url + 'post/delete-post/' + id)
+                .then((response) => {
+                    console.log(response.data)
+                    this.successMessage(response.data);
+                    this.$store.dispatch("post/geDatatList", [this.page,this.limit,this.keyword]);
+                })
+                .catch((error) => {
+                    console.log(error)
+                    this.successMessage(error.data);
+                })
 
-        deletePost(id){
-            this.$store.dispatch('post/deletePost', id);
-        }
+
+                }
+            });
+
+
+        },
     },
 };
 </script>

@@ -14,8 +14,7 @@ export default {
 
 
         successMessage(data) {
-            let that = this;
-            that.$swal({
+            this.$swal({
                 icon: data.status,
                 title: data.status,
                 text: data.message,
@@ -31,7 +30,30 @@ export default {
                 text: message,
 
             });
-        }
+        },
+
+        dateTimeFormat(datetime) {
+            return moment(datetime).format('DD-MM-YYYY');
+        },
+
+        statusName(status) {
+            let data = {
+                0: "Pending",
+                1: "Published",
+                2: "Draft",
+            };
+            return data[status];
+        },
+
+        statusColor(status) {
+            let data = {
+                0: "badge-warning",
+                1: "badge-primary",
+                2: "badge-danger",
+            };
+            return data[status];
+        },
+
 
     },
 

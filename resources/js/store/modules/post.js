@@ -46,16 +46,6 @@ export default {
             history.pushState(null, null, "?page=" + page + "&limit=" + limit + "&keyword=" + keyword);
         },
 
-        async deletePost({ commit }, id) {
-            await axios.get(base_url + 'post/delete-post/' + id)
-                .then((response) => {
-                    console.log(response.data)
-                })
-                .catch((error) => {
-                    console.log(error)
-                })
-        }
-
     }
 
 

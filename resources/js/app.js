@@ -17,6 +17,9 @@ app.use(snotify);
 import store from "./store/index";
 app.use(store);
 
+//Momenttum package
+import moment from 'moment';
+app.use(moment);
 
 //Dashboard
 import DashboardComponent from './components/DashboardComponent.vue';
@@ -24,10 +27,10 @@ app.component('dashboard-component', DashboardComponent);
 
 //Post Component
 import ViewPostComponent from './components/ViewPostComponent.vue';
-import CreatePostComponent from './components/CreatePostComponent.vue';
+//import CreatePostComponent from './components/CreatePostComponent.vue';
 
 app.component('view-post-component', ViewPostComponent);
-app.component('create-post-component', CreatePostComponent);
+//app.component('create-post-component', CreatePostComponent);
 
 //post component
 
