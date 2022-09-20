@@ -93,3 +93,16 @@ source = https://vuejs.org/guide/components/registration.html
 ============================vue===================
 1. mixin => mane helper function. sob doroner message thakbe
 2.$emit => ..............
+
+
+================================================Loader Component ==============================
+video : https://www.youtube.com/watch?v=JWqzToFsqr4
+
+demo 1: https://epic-spinners.epicmax.co/
+demo 2: https://tobiasahlin.com/spinkit/
+
+package = https://www.npmjs.com/package/tiny-emitter
+
+app.js e inport system 
+    import Emitter from 'tiny-emitter'
+    window.emitter = new Emitter();

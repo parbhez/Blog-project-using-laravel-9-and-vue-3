@@ -21,6 +21,11 @@ app.use(store);
 import moment from 'moment';
 app.use(moment);
 
+//Loader Emitter
+//npm i tiny-emitter
+import Emitter from 'tiny-emitter'
+window.emitter = new Emitter();
+
 //Dashboard
 import DashboardComponent from './components/DashboardComponent.vue';
 app.component('dashboard-component', DashboardComponent);
@@ -59,6 +64,8 @@ import SpinnerLoader from './components/SpinnerLoader.vue';
 app.component('spinner-loader', SpinnerLoader);
 
 import Loader from './components/Loader.vue';
+import LoaderComponent from './components/LoaderComponent.vue';
 app.component('loader-component', Loader);
+app.component('showloader-component', LoaderComponent);
 
 app.mount('#app');

@@ -37,7 +37,7 @@
 
 <body>
     <div id="app" style="display: none;">
-
+        <showloader-component></showloader-component>
         <div class="main-wrapper main-wrapper-1">
             <div class="navbar-bg"></div>
             @include('partials.nav')
