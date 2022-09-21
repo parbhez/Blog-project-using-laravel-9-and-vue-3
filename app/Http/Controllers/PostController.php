@@ -98,7 +98,7 @@ class PostController extends Controller
             $post = new Post;
             $post->title = $request->title;
             $post->category_id = $request->category_id;
-            $post->body = $request->content;
+            $post->content = $request->content;
             $post->tag = $request->tag;
             $post->status = $request->status;
 
@@ -146,9 +146,9 @@ class PostController extends Controller
         //
     }
 
-    public function edit(Post $post)
+    public function postEdit($id)
     {
-        //
+        return Post::find($id);
     }
 
 

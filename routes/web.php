@@ -17,6 +17,7 @@ Route::get('/post',[PostController::class,'post'])->name('post');
 Route::post('post/post-create',[PostController::class,'store'])->name('post-create');
 Route::get('post/post-list',[PostController::class,'getPostList'])->name('post-list');
 Route::get('post/post/list',[PostController::class,'postList'])->name('post.list');
+Route::get('post/post-edit/{id}',[PostController::class,'postEdit'])->name('post.edit');
 Route::get('post/delete-post/{id}',[PostController::class,'deletePost'])->name('post.delete');
 
 Route::get('post/onchange-post-list',[PostController::class,'onChangePostList'])->name('onchange-post-list');

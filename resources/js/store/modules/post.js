@@ -1,9 +1,12 @@
+import axios from "axios";
+
 export default {
 
     namespaced: true,
 
     state: {
         posts: [],
+        singlepost: {},
         isLoading: false,
     },
 
@@ -23,6 +26,11 @@ export default {
             state.posts = data;
             //state.isLoading = false;
             window.emitter.emit('changeLoaderStatus', false);
+        },
+
+        getSinglePost(state, data) {
+            state.singlepost = data;
+            //console.log(data)
         }
     },
 
@@ -69,6 +77,15 @@ export default {
 
             history.pushState(null, null, "?page=" + page + "&limit=" + limit + "&keyword=" + keyword);
         },
+
+        async editPost({ commit }, id) {
+            await axios.get(base_url + 'post/post-edit/' + id)
+                .then((response) => {
+                    commit('getSinglePost', response.data)
+                }).catch((error) => {
+                    console.log(error);
+                })
+        }
 
 
     }

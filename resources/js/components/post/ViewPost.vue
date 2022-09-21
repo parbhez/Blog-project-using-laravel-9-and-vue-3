@@ -126,7 +126,9 @@
                                             </div>
                                         </a>
                                     </td>
-                                    <td>{{ dateTimeFormat(post.created_at)}}</td>
+                                    <td>
+                                        {{ dateTimeFormat(post.created_at) }}
+                                    </td>
                                     <td>
                                         <div
                                             class="badge"
@@ -135,12 +137,40 @@
                                             {{ statusName(post.status) }}
                                         </div>
                                     </td>
-                                    <td>
+
+                                    <td class="dropdown">
                                         <a
                                             class="btn btn-secondary btn-sm"
-                                            @click.prevent="deletePost(post.id)"
-                                            >Delete</a
+                                            data-toggle="dropdown"
+                                            ><div
+                                                class="d-sm-none d-lg-inline-block"
+                                            >
+                                                Action
+                                            </div></a
                                         >
+                                        <div
+                                            class="dropdown-menu dropdown-menu-right"
+                                        >
+                                            <a
+                                                @click.prevent="
+                                                    editPost(post.id)
+                                                "
+                                                class="dropdown-item has-icon"
+                                                style="cursor: pointer"
+                                            >
+                                                <i class="far fa-edit" title="Edit"></i>Edit
+                                            </a>
+                                            <a
+                                                @click.prevent="
+                                                    deletePost(post.id)
+                                                "
+                                                class="dropdown-item has-icon"
+                                                style="cursor: pointer"
+                                            >
+                                                <i class="fas fa-times" title="Delete"></i>
+                                                Delete
+                                            </a>
+                                        </div>
                                     </td>
                                 </tr>
                             </tbody>
@@ -159,16 +189,27 @@
                         :limit="limit"
                         :keyword="keyword"
                     ></pagination-component>
+
+
+
                 </div>
             </div>
         </div>
+
+
     </div>
+
+
 </template>
+
+
 
 <script>
 import Mixin from "../../helper/mixin";
+
 export default {
     mixins: [Mixin],
+
     data() {
         return {
             limit: 10,
@@ -216,11 +257,9 @@ export default {
             return this.$store.getters["post/isLoading"];
         },
 
-
     },
 
     methods: {
-
         async deletePost(id) {
             this.$swal({
                 title: "Are you sure?",
@@ -232,23 +271,30 @@ export default {
                 confirmButtonText: "Yes, delete it!",
             }).then((result) => {
                 if (result.isConfirmed) {
-                axios.get(base_url + 'post/delete-post/' + id)
-                .then((response) => {
-                    console.log(response.data)
-                    this.successMessage(response.data);
-                    this.$store.dispatch("post/geDatatList", [this.page,this.limit,this.keyword]);
-                })
-                .catch((error) => {
-                    console.log(error)
-                    this.successMessage(error.data);
-                })
-
-
+                    axios
+                        .get(base_url + "post/delete-post/" + id)
+                        .then((response) => {
+                            console.log(response.data);
+                            this.successMessage(response.data);
+                            this.$store.dispatch("post/geDatatList", [
+                                this.page,
+                                this.limit,
+                                this.keyword,
+                            ]);
+                        })
+                        .catch((error) => {
+                            console.log(error);
+                            this.successMessage(error.data);
+                        });
                 }
             });
-
-
         },
+
+        editPost(id){
+            $("#update-modal-form").modal("show");
+            this.$store.dispatch('post/editPost',id);
+            //console.log(id);
+        }
     },
 };
 </script>

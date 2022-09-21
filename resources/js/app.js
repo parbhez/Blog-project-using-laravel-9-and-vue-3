@@ -2,6 +2,9 @@ import './bootstrap'; //import bootstrap
 import { createApp } from 'vue';
 const app = createApp({}); //vue instance
 
+app.config.errorHandler = () => null;
+app.config.warnHandler = () => null;
+
 //Install Vue Sweet alert
 import VueSweetalert2 from 'vue-sweetalert2';
 import 'sweetalert2/dist/sweetalert2.min.css';
@@ -44,6 +47,9 @@ app.component('view-post', ViewPost);
 
 import CreatePost from './components/post/CreatePost.vue';
 app.component('create-post', CreatePost);
+
+import UpdatePost from "./components/post/UpdatePost.vue"
+app.component('update-post', UpdatePost);
 
 
 //Category Component
