@@ -44,24 +44,7 @@
                     <div class="table-responsive">
                         <table class="table table-striped">
                             <tr>
-                                <th class="text-center pt-2">
-                                    <div
-                                        class="custom-checkbox custom-checkbox-table custom-control"
-                                    >
-                                        <input
-                                            type="checkbox"
-                                            data-checkboxes="mygroup"
-                                            data-checkbox-role="dad"
-                                            class="custom-control-input"
-                                            id="checkbox-all"
-                                        />
-                                        <label
-                                            for="checkbox-all"
-                                            class="custom-control-label"
-                                            >&nbsp;</label
-                                        >
-                                    </div>
-                                </th>
+                                <th class="text-center pt-2"><input type="checkbox"/></th>
                                 <th>SL No</th>
                                 <th>Title</th>
                                 <th>Tag</th>
@@ -79,23 +62,7 @@
                                     v-for="(post, key) in getAllPost.data"
                                     :key="key"
                                 >
-                                    <td>
-                                        <div
-                                            class="custom-checkbox custom-control"
-                                        >
-                                            <input
-                                                type="checkbox"
-                                                data-checkboxes="mygroup"
-                                                class="custom-control-input"
-                                                id="checkbox-2"
-                                            />
-                                            <label
-                                                for="checkbox-2"
-                                                class="custom-control-label"
-                                                >&nbsp;</label
-                                            >
-                                        </div>
-                                    </td>
+                                    <td><input type="checkbox" v-model="post_ids" :value="post.id"/></td>
                                     <td>{{ post.id }}</td>
                                     <td>
                                         {{ post.title }}
@@ -190,15 +157,12 @@
                         :keyword="keyword"
                     ></pagination-component>
 
-
-
                 </div>
             </div>
         </div>
 
 
-    </div>
-
+</div>
 
 </template>
 
@@ -210,11 +174,20 @@ import Mixin from "../../helper/mixin";
 export default {
     mixins: [Mixin],
 
+    props:{
+        categories:{
+            type:Array,
+            default: []
+        }
+    },
+
     data() {
         return {
             limit: 10,
             keyword: "",
             page: 1,
+            post_ids: [],
+
         };
     },
 
@@ -291,10 +264,14 @@ export default {
         },
 
         editPost(id){
-            $("#update-modal-form").modal("show");
+           $("#update-modal-form").modal("show");
             this.$store.dispatch('post/editPost',id);
             //console.log(id);
         }
     },
 };
 </script>
+
+<style scoped>
+
+</style>

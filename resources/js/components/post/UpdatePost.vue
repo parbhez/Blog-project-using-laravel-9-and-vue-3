@@ -9,7 +9,7 @@
       aria-hidden="true"
     >
       <div class="modal-dialog modal-lg">
-        <form @submit.prevent="save()" role="form">
+        <form @submit.prevent="update_post()" role="form">
           <div class="modal-content">
             <div class="modal-header">
               <h5 class="modal-title" id="exampleModalLabel">Update Your Post</h5>
@@ -22,8 +22,6 @@
                 <span aria-hidden="true">&times;</span>
               </button>
             </div>
-
-            {{ getSinglePost}}
             <div class="modal-body">
               <div class="card">
                 <div
@@ -219,15 +217,12 @@
       },
     },
 
-    mounted() {
-
-    },
-
-
     data() {
       return {
         post: {
+          
           title: "",
+          postId: "",
           category_id: "",
           image: "",
           view_image: "",
@@ -235,6 +230,7 @@
           tag: "",
           status: "",
         },
+
         page: 1,
         limit: 10,
         keyword: '',
@@ -245,18 +241,34 @@
     },
 
     computed:{
-        getSinglePost() {
-            this.post.title =  this.$store.state.post.singlepost.title;
-            this.post.category_id =  this.$store.state.post.singlepost.category_id;
-            this.post.content =  this.$store.state.post.singlepost.content;
-            this.post.view_image =  this.$store.state.post.singlepost.thumbnail;
-            this.post.tag =  this.$store.state.post.singlepost.tag;
-            this.post.status =  this.$store.state.post.singlepost.status;
-
+      getSinglePost() {
             return this.$store.state.post.singlepost;
+            //return this.$store.getters['post/getOnePost'];
         },
     },
 
+    watch: {
+      getSinglePost: {
+      handler({ title, id, category_id, content, thumbnail, tag, status}) {
+            this.post.title =  title;
+            this.post.postId =  id;
+            this.post.category_id =  category_id;
+            this.post.content =  content;
+            this.post.view_image =  thumbnail ?? 'demo.jpg';
+            this.post.tag =  tag;
+            this.post.status =  status;
+      },
+      deep: true, // deep is to listen to objects properly
+      immediate: true // immediate so the watcher triggers right away when the component is mounted
+    }
+  },
+
+    mounted() {
+          
+    },
+
+
+    
 
     methods: {
       onImageChange(e) {
@@ -274,19 +286,17 @@
         reader.readAsDataURL(file);
       },
 
-      async save() {
+      async update_post() {
         this.button_name = "Updating .....";
 
         await axios
-          .post(base_url + "post/post-create", this.post)
+          .post(base_url + "post/post-update", this.post)
           .then((response) => {
             console.log(response.data);
-
             if (response.data.status === "success") {
-              $("#modal-form").modal("hide");
+              $("#update-modal-form").modal("hide");
               this.resetForm();
               this.successMessage(response.data);
-              //EventBus.$emit("post-created");
               this.button_name = "Create Post";
               this.$store.dispatch("post/geDatatList", [this.page,this.limit,this.keyword]);
             } else {

@@ -74,4 +74,7 @@ import LoaderComponent from './components/LoaderComponent.vue';
 app.component('loader-component', Loader);
 app.component('showloader-component', LoaderComponent);
 
+import ModalComponent from './components/Modal.vue';
+app.component('modal-component', ModalComponent);
+
 app.mount('#app');

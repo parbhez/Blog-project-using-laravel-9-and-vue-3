@@ -34,7 +34,7 @@
                             <div class="card-body">
 
                                 {{-- <view-post-component></view-post-component> --}}
-                                <view-post></view-post>
+                                <view-post :categories='@json($categories)'></view-post>
 
                             </div>
                         </div>
@@ -48,8 +48,7 @@
     </div>
        <!-- Modal ke always  main content div r bahire rakhte hoy-->
     <create-post :categories='@json($categories)'></create-post>
-
-    <update-post :categories='@json($categories)'></update-post>
+    <update-post :categories='@json($categories)'></update-post> 
 
 @endsection
 
