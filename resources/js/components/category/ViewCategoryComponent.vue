@@ -1,8 +1,15 @@
 <template>
     <div class="row mt-1">
         <div class="col-12">
+
+            <button-component @click="addModal = true">Add Category</button-component>
+
+
             <div class="card">
                 <div class="card-body">
+
+
+
                     <div class="float-left">
                         <label> Show &nbsp; </label>
                     </div>
@@ -151,15 +158,20 @@
             </div>
         </div>
     </div>
+
+    <modal-component v-model="addModal"></modal-component>
+
 </template>
 
 <script>
+
 import { mapState, mapActions, mapGetters } from 'vuex';
 export default {
 
     data() {
         return {
             bookName: "",
+            addModal: false,
         };
     },
 

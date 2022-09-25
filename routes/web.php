@@ -20,6 +20,8 @@ Route::get('post/post/list',[PostController::class,'postList'])->name('post.list
 Route::get('post/post-edit/{id}',[PostController::class,'postEdit'])->name('post.edit');
 Route::post('post/post-update',[PostController::class,'postUpdate'])->name('post.update');
 Route::get('post/delete-post/{id}',[PostController::class,'deletePost'])->name('post.delete');
+Route::post('post/remove-post',[PostController::class,'removePost'])->name('post.remove');
+Route::post('post/change-status',[PostController::class,'changeStatus'])->name('change.status');
 
 Route::get('post/onchange-post-list',[PostController::class,'onChangePostList'])->name('onchange-post-list');
 

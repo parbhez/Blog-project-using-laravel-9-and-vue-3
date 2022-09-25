@@ -12,7 +12,7 @@ export default {
 
     getters: {
         totalPost(state) {
-            return state.posts;
+            return state.posts.data;
         },
 
         isLoading(state) {
@@ -73,7 +73,7 @@ export default {
                         console.log(error)
                         window.emitter.emit('changeLoaderStatus', false);
                     })
-            }, 1000);
+            }, 500);
 
             history.pushState(null, null, "?page=" + page + "&limit=" + limit + "&keyword=" + keyword);
         },

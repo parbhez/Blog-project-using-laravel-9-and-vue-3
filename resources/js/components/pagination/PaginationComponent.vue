@@ -6,7 +6,7 @@
             role="status"
             aria-live="polite"
         >
-            Showing {{startFrom}} to {{endTo}} of {{totalCountData}} entries
+            Showing {{startFrom ?? 0 }} to {{endTo ?? 0}} of {{totalCountData ?? 0}} entries
         </div>
     </div>
 

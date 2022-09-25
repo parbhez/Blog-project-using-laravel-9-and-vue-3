@@ -1,3 +1,5 @@
+import { Callbacks } from "jquery";
+
 export default {
     methods: {
         playCartSound() {
@@ -32,6 +34,20 @@ export default {
             });
         },
 
+        deleteConfirmed(callbacks) {
+            this.$swal({
+                title: "Are you sure?",
+                text: "You won't be able to revert this!",
+                icon: "warning",
+                showCancelButton: true,
+                confirmButtonColor: "#3085d6",
+                cancelButtonColor: "#d33",
+                confirmButtonText: "Yes, delete it!",
+            }).then((result) => {
+                if (result.isConfirmed) callbacks();
+            });
+        },
+
         dateTimeFormat(datetime) {
             return moment(datetime).format('DD-MM-YYYY');
         },
@@ -55,9 +71,50 @@ export default {
         },
 
 
+
+
+
     },
 
     mounted() {
+
+
+    },
+
+    computed: {
+        subString() {
+            return (content, length, suffix) => {
+                return content.substring(0, length) + suffix;
+            }
+        },
+
+        uppercase() {
+            return (getString) => {
+                return getString.toUpperCase()
+            }
+        },
+
+        upperCaseFirst() {
+            return (getString) => {
+                return getString.charAt(0).toUpperCase() + getString.slice(1);
+            }
+        },
+
+        capitalizeFirstLetterOfEachWord() {
+            return (getString) => {
+                //input: const getString = 'i have learned something new today';
+
+                const arr = getString.split(" ");
+
+                for (var i = 0; i < arr.length; i++) {
+                    arr[i] = arr[i].charAt(0).toUpperCase() + arr[i].slice(1);
+
+                }
+                return arr.join(" ");
+                ////Outptut: I Have Learned Something New Today
+            }
+        }
+
 
 
     },

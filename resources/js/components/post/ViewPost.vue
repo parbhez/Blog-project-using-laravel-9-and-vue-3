@@ -44,9 +44,10 @@
                     <div class="table-responsive">
                         <table class="table table-striped">
                             <tr>
-                                <th class="text-center pt-2"><input type="checkbox"/></th>
+                                <th class="text-center pt-2"><input :disabled="emptyData()" type="checkbox" @click="selectAll" v-model="selectedAll"/></th>
                                 <th>SL No</th>
                                 <th>Title</th>
+                                <th>Content</th>
                                 <th>Tag</th>
                                 <th>Category</th>
                                 <th>Author</th>
@@ -55,17 +56,18 @@
                                 <th>Action</th>
                             </tr>
 
-                            <tbody
-                                v-if="Object.keys(countTotalPost).length > 0"
-                            >
+                            <tbody>
                                 <tr
                                     v-for="(post, key) in getAllPost.data"
                                     :key="key"
                                 >
-                                    <td><input type="checkbox" v-model="post_ids" :value="post.id"/></td>
+                                    <td><input type="checkbox" v-model="selected" :value="post.id"/></td>
                                     <td>{{ post.id }}</td>
                                     <td>
                                         {{ post.title }}
+                                    </td>
+                                    <td>
+                                        {{ subString(post.content, 10, '......') }}
                                     </td>
                                     <td>{{ post.tag }}</td>
                                     <td>
@@ -140,14 +142,35 @@
                                         </div>
                                     </td>
                                 </tr>
-                            </tbody>
-                            <tbody v-else>
-                                <tr>
-                                    <td colspan="8" class="text-center">
+
+                                <tr v-if="!emptyData()">
+                                    <td colspan="10">
+                                        <div class="dropdown">
+                                            <button class="btn dropdown-toggle" :class="booleanStatus(isSelected)" :disabled="!isSelected" type="button" data-toggle="dropdown" aria-expanded="false">
+                                                Action
+                                            </button>
+                                            <div class="dropdown-menu">
+                                                <button class="dropdown-item btn btn-warning" @click.prevent="changeStatus(selected, 0)" style="cursor: pointer" type="button">Pending</button>
+                                                <button class="dropdown-item btn btn-success" @click.prevent="changeStatus(selected, 1)" style="cursor: pointer" type="button">Published</button>
+                                                <button class="dropdown-item btn btn-info" @click.prevent="changeStatus(selected ,2)" style="cursor: pointer" type="button">Draft</button>
+                                                <button class="dropdown-item btn btn-danger" @click.prevent="removePost(selected)" style="cursor: pointer" type="button">Remove</button>
+                                            </div>
+                                            </div>
+                                    </td>
+                                </tr>
+
+                                <tr v-if="emptyData()">
+                                    <td colspan="10" class="text-center">
                                         Data not found
                                     </td>
                                 </tr>
+
                             </tbody>
+
+
+
+
+
                         </table>
                     </div>
 
@@ -169,6 +192,7 @@
 
 
 <script>
+import axios from "axios";
 import Mixin from "../../helper/mixin";
 
 export default {
@@ -186,7 +210,10 @@ export default {
             limit: 10,
             keyword: "",
             page: 1,
-            post_ids: [],
+            selected: [],
+            isSelected: false,
+            selectedAll: false,
+
 
         };
     },
@@ -207,6 +234,12 @@ export default {
                 newKeyword,
             ]);
         },
+
+        selected(selected){
+            this.isSelected = (selected.length > 0);
+            //console.log(selected.length > 0);
+           this.selectedAll = (selected.length === this.countTotalPost.length);
+        },
     },
 
     mounted() {
@@ -216,6 +249,7 @@ export default {
             this.keyword,
         ]);
     },
+
 
     computed: {
         getAllPost() {
@@ -233,19 +267,78 @@ export default {
     },
 
     methods: {
+
+        booleanStatus(status){
+            let data = {
+                false: 'btn-danger',
+                true: 'btn-primary',
+            }
+
+            return data[status];
+        },
+        emptyData(){
+            return (this.getAllPost.total < 1); //10 < 1 == false
+        },
+
+        selectAll(event){
+
+            if(event.target.checked === false){
+                this.selected = []
+            }else{
+                this.selected = [];
+                this.countTotalPost.forEach((post)=> {
+                //   if(this.selected.indexOf(post.id) === -1){
+                //     this.selected.push(post.id)
+                //   }
+                  this.selected.push(post.id)
+               })
+            }
+        },
+
+        async removePost(selectedPost){
+            this.deleteConfirmed(()=>{
+                 axios.post(base_url+"post/remove-post", {data:selectedPost})
+            .then((response)=>{
+                console.log(response.data)
+                this.selected = [],
+                this.isSelected = false,
+                this.selectedAll = false,
+                this.successMessage(response.data);
+                this.$store.dispatch("post/geDatatList", [
+                                this.page,
+                                this.limit,
+                                this.keyword,
+                            ]);
+            })
+            .catch((error)=>{
+                console.log(error)
+                this.successMessage(error.data);
+            });
+            })
+        },
+
+        async changeStatus(selectedPost, status){
+            await axios.post(base_url + 'post/change-status', { data: selectedPost, status: status } )
+            .then((response)=>{
+                console.log(response.data)
+                this.selected = [],
+                this.isSelected = false,
+                this.selectedAll = false,
+                this.successMessage(response.data);
+                this.$store.dispatch("post/geDatatList", [
+                                this.page,
+                                this.limit,
+                                this.keyword,
+                            ]);
+            })
+            .catch((error)=>{
+                console.log(error)
+            })
+        },
+
         async deletePost(id) {
-            this.$swal({
-                title: "Are you sure?",
-                text: "You won't be able to revert this!",
-                icon: "warning",
-                showCancelButton: true,
-                confirmButtonColor: "#3085d6",
-                cancelButtonColor: "#d33",
-                confirmButtonText: "Yes, delete it!",
-            }).then((result) => {
-                if (result.isConfirmed) {
-                    axios
-                        .get(base_url + "post/delete-post/" + id)
+            this.deleteConfirmed(()=>{
+                axios.get(base_url + "post/delete-post/" + id)
                         .then((response) => {
                             console.log(response.data);
                             this.successMessage(response.data);
@@ -259,8 +352,7 @@ export default {
                             console.log(error);
                             this.successMessage(error.data);
                         });
-                }
-            });
+            })
         },
 
         editPost(id){

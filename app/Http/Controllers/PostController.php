@@ -61,7 +61,7 @@ class PostController extends Controller
     public function postList(Request $request)
     {
 
-        $post = Post::with('category'); //belongs to
+        $post = Post::with('category')->whereIn('posts.status',[2,0,3]); //belongs to
 
         if ($request->limit != '') {
             $post = $post->paginate($request->limit);
@@ -214,16 +214,67 @@ class PostController extends Controller
 
             $post = Post::find($id);
             if (file_exists('images/post/' . $post->thumbnail) && !empty($post->thumbnail)) {
-
                 unlink('images/post/' . $post->thumbnail);
             }
 
             $post->delete();
 
-            return response()->json(['status' => 'success', 'message' => 'Delete Successfull !']);
+            return response()->json(['status' => 'success', 'message' => 'Post Deleted Successfully !']);
         } catch (\Exception $e) {
             // return $e;
             return response()->json(['status' => 'error', 'message' => 'Something Went Wrong !']);
         }
+    }
+
+    public function removePost(Request $request)
+    {
+        $serial = 0;
+
+        try{
+            foreach($request->data as $id){
+
+                $post = Post::find($id);
+
+                if (file_exists('images/post/' . $post->thumbnail) && !empty($post->thumbnail)) {
+                    unlink('images/post/' . $post->thumbnail);
+                }
+
+                $post->delete();
+                $serial++;
+            }
+            if($serial > 0){
+                return response()->json(['status' => 'success', 'total' => $serial,  'message' => $serial .' '. ' Post has been deleted successfully !']);
+            }else{
+                return response()->json(['status' => 'error', 'message' => 'Server Error !']);
+            }
+
+        }catch (\Exception $e) {
+            // return $e;
+            return response()->json(['status' => 'error', 'message' => 'Something Went Wrong !']);
+        }
+    }
+
+    public function changeStatus(Request $request)
+    {
+        $message = $request->status == 1 ? 'Published' : (($request->status == 2 ? 'Draft' : 'Pending'));
+
+        $serial = 0;
+        try{
+            foreach($request->data as $id){
+                $post = Post::find($id);
+                $post->status = $request->status;
+                $post->update();
+                $serial++;
+             }
+
+             if($serial > 0){
+                 return response()->json(['status' => 'success', 'total' => $serial,  'message' => $serial .' '. ' Post goes to ' . $message . ' list !']);
+             }else{
+                 return response()->json(['status' => 'error', 'message' => 'Server Error !']);
+             }
+        }catch(\Illuminate\Database\QueryException $e){
+            return response()->json(['status' => 'error', 'message' => 'Something Went Wrong !']);
+        }
+
     }
 }

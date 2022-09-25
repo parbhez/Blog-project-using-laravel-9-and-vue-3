@@ -46,24 +46,6 @@
               </div>
 
               <div class="card-body">
-                <div class="form-group row mb-4">
-                  <label
-                    class="
-                      col-form-label
-                      text-md-right
-                      col-12 col-md-3 col-lg-3
-                    "
-                    >Title</label
-                  >
-                  <div class="col-sm-12 col-md-7">
-                    <input
-                      type="text"
-                      v-model="post.title"
-                      class="form-control"
-                      placeholder="Title"
-                    />
-                  </div>
-                </div>
 
                 <div class="form-group row mb-4">
                   <label
@@ -87,6 +69,30 @@
                     </select>
                   </div>
                 </div>
+
+
+                <div class="form-group row mb-4">
+                  <label
+                    class="
+                      col-form-label
+                      text-md-right
+                      col-12 col-md-3 col-lg-3
+                    "
+                    >Title</label
+                  >
+                  <div class="col-sm-12 col-md-7">
+                    <input
+                      type="text"
+                      v-model="post.title"
+                      class="form-control"
+                      placeholder="Title"
+                      :disabled="!isCategorySelected"
+                    />
+                  </div>
+                </div>
+
+
+
                 <div class="form-group row mb-4">
                   <label
                     class="
@@ -97,11 +103,14 @@
                     >Content</label
                   >
                   <div class="col-sm-12 col-md-7">
-                    <textarea
+                    <!-- <textarea
+                    :disabled="!isCategorySelected"
                       class="form-control"
                       v-model="post.content"
                       placeholder="Post Content"
-                    ></textarea>
+                    ></textarea> -->
+
+                    <ckeditor :editor="editor" :disabled="!isCategorySelected" placeholder="Post Content" v-model="post.content" :config="editorConfig"></ckeditor>
                   </div>
                 </div>
                 <div class="form-group row mb-4">
@@ -119,6 +128,7 @@
                         >Choose File</label
                       >
                       <input
+                       :disabled="!isCategorySelected"
                         type="file"
                         name="image"
                         id="image-upload"
@@ -153,6 +163,7 @@
                   >
                   <div class="col-sm-12 col-md-7">
                     <input
+                    :disabled="!isCategorySelected"
                       type="text"
                       class="form-control inputtags"
                       v-model="post.tag"
@@ -170,7 +181,7 @@
                     >Status</label
                   >
                   <div class="col-sm-12 col-md-7">
-                    <select class="form-control" v-model="post.status">
+                    <select class="form-control" v-model="post.status" :disabled="!isCategorySelected">
                       <option value="" disabled>Please Choose a Status</option>
                       <option value="1">Publish</option>
                       <option value="2">Draft</option>
@@ -189,7 +200,7 @@
             >
               Close
             </button>
-            <button class="btn btn-primary" type="submit">
+            <button class="btn" :class="booleanStatus(isStatusSelected)" type="submit" :disabled="!isStatusSelected">
               {{ button_name }}
             </button>
           </div>
@@ -200,7 +211,7 @@
 </template>
 
 <script>
-
+import ClassicEditor from '@ckeditor/ckeditor5-build-classic';
 import Mixin from '../../helper/mixin'
 export default {
 mixins: [Mixin],
@@ -231,10 +242,34 @@ mixins: [Mixin],
       button_name: "Create Post",
       validation_error: null,
       elementVisible: true,
+      isCategorySelected: false,
+      isStatusSelected: false,
+      editor: ClassicEditor,
+      editorConfig: {}
     };
   },
 
+  watch:{
+    post:{
+        handler({category_id,status}){
+            this.isCategorySelected = category_id != '';
+            this.isStatusSelected = status != '';
+        },
+        deep: true, // deep is to listen to objects properly
+        immediate: true // immediate so the watcher triggers right away when the component is mounted
+    }
+  },
+
   methods: {
+
+    booleanStatus(status){
+        let data = {
+            true: 'btn-primary',
+            false: 'btn-danger'
+        }
+        return data[status];
+    },
+
     onImageChange(e) {
       let files = e.target.files || e.dataTransfer.files;
       if (!files.length) return;

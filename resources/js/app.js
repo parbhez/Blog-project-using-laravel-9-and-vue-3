@@ -2,8 +2,8 @@ import './bootstrap'; //import bootstrap
 import { createApp } from 'vue';
 const app = createApp({}); //vue instance
 
-app.config.errorHandler = () => null;
-app.config.warnHandler = () => null;
+// app.config.errorHandler = () => null;
+// app.config.warnHandler = () => null;
 
 //Install Vue Sweet alert
 import VueSweetalert2 from 'vue-sweetalert2';
@@ -28,6 +28,10 @@ app.use(moment);
 //npm i tiny-emitter
 import Emitter from 'tiny-emitter'
 window.emitter = new Emitter();
+
+//Ckeditor
+import CKEditor from '@ckeditor/ckeditor5-vue';
+app.use(CKEditor);
 
 //Dashboard
 import DashboardComponent from './components/DashboardComponent.vue';
@@ -74,7 +78,10 @@ import LoaderComponent from './components/LoaderComponent.vue';
 app.component('loader-component', Loader);
 app.component('showloader-component', LoaderComponent);
 
-import ModalComponent from './components/Modal.vue';
+import ModalComponent from './components/TheModal.vue';
 app.component('modal-component', ModalComponent);
+
+import ButtonComponent from './components/TheButton.vue';
+app.component('button-component', ButtonComponent);
 
 app.mount('#app');
